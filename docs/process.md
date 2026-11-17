@@ -1,0 +1,16 @@
+# What Three Voids taught us
+
+Evidence: the original README documents successive passes; source and build receipts are preserved in `examples/three-voids-source`. The final stored timeline contains 37 shots, 148 beats and 744.87 seconds. Publication is reported by the owner; this extraction does not independently assess audience performance.
+
+1. **Record a scratch voice before expensive finishing.** The original nine-minute intention became an estimated 11m14s and a final 12m25s timeline. Word counts help planning; a real reading determines pacing.
+2. **One timing model prevents independent clocks drifting.** Script beat separators feed picture cuts, highlights, map changes and `at(shot, beat)` score cues. Preserve semantic anchors rather than scattering absolute seconds throughout the production.
+3. **Show the argument.** A documented revision kept the whole painting visible and used highlights and small magnifiers instead of continuously moving the camera. Use motion to explain the sentence, with a reason for each cue.
+4. **Retakes need an escape hatch.** Last-reading selection plus speech-energy trimming reduced manual work, but one repeated opening needed an explicit start-time override. Keep source recordings until delivery is accepted; review selection reports and listen to boundaries.
+5. **ASR is evidence, not a verdict.** The stored English selection report has 91–100% word coverage; the Russian report reaches 79% at its lowest. Names and language changes affect recognition. Missing transcript phrases should trigger targeted retranscription or manual review, not confident deletion.
+6. **Translation needs timing constraints.** Match shot and sentence beats, remove excess pauses first, then use bounded tempo changes. If a passage still doesn't fit, rewrite or rerecord it. Never silently spill arbitrary speech into the next scene.
+7. **The score can carry part of the argument.** The production leaves a theme unresolved, changes its instrumentation between worlds, and resolves the missing note at the self-portrait connection. Preserve the technique and beat anchors, rather than reusing the identical emotional arc in every film.
+8. **Review cheaply before rendering everything.** Burned-in shot/beat guides, per-beat contact sheets, isolated-shot rendering and cached graphics shorten the feedback loop. Loudness reports complement listening; they cannot judge intelligibility or taste.
+9. **Treat storage and dependencies as production inputs.** The workspace split across two disks via symlinks when the root disk filled. Use configurable project/cache paths and a dependency inventory from the outset. Content-check cached renders before reuse.
+10. **Finish with one current handoff.** The original README still says there is no narration or music, then later describes the score. Keep the final build recipe, media location, credits and delivery files in one authoritative release note instead of accumulating contradictory pass notes.
+
+For the next film: a short premise and evidence list → scratch reading → shot/beat skeleton → one representative finished section → footage and graphics → measured voice alignment → score and mix → bilingual review if needed → final export, credits and publication record.

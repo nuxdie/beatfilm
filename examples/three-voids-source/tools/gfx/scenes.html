@@ -1,0 +1,447 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+@font-face { font-family: "Inter"; font-weight: 300; src: url("node_modules/@fontsource/inter/files/inter-latin-300-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 400; src: url("node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 500; src: url("node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 600; src: url("node_modules/@fontsource/inter/files/inter-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 700; src: url("node_modules/@fontsource/inter/files/inter-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 900; src: url("node_modules/@fontsource/inter/files/inter-latin-900-normal.woff2") format("woff2"); }
+@font-face { font-family: "Source Serif 4"; font-weight: 400; src: url("node_modules/@fontsource/source-serif-4/files/source-serif-4-latin-400-normal.woff2") format("woff2"); }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; background: #000; overflow: hidden; }
+body { font-family: "Inter", "Nimbus Sans", "Liberation Sans", sans-serif; color: #fff;
+  -webkit-font-smoothing: antialiased; text-rendering: geometricPrecision; font-kerning: normal; }
+.layer { position: absolute; inset: 0; display: none; overflow: hidden; }
+svg { display: block; }
+
+/* ---------- title / credit / cursor ---------- */
+#title, #credit { align-items: center; justify-content: center; flex-direction: column; }
+#title .t { font-size: 46px; font-weight: 400; letter-spacing: 0.62em; margin-right: -0.62em; color: #fff; }
+#credit .c1 { font-size: 34px; font-weight: 400; letter-spacing: 0.01em; color: #f2f2f2; }
+#credit .crh { font-size: 20px; letter-spacing: 0.22em; text-transform: uppercase; color: #8c8c8c; margin-bottom: 26px; }
+#credit .crt { border-collapse: collapse; }
+#credit .crt td { font-size: 23px; padding: 8px 24px; color: #a8a8a8; font-weight: 400; white-space: nowrap; }
+#credit .crt td:first-child { color: #f2f2f2; font-weight: 500; text-align: right; }
+#credit .crt td:last-child { color: #d8d8d8; letter-spacing: 0.02em; }
+#credit .crn { font-size: 18px; line-height: 1.6; color: #6f6f6f; margin-top: 40px; text-align: center; }
+#credit .c2 { font-size: 22px; font-weight: 400; letter-spacing: 0.06em; color: #8c8c8c; margin-top: 26px; }
+#cursor .bar { position: absolute; left: 958px; top: 514px; width: 3px; height: 52px; background: #fff; }
+
+/* ---------- prompt window (after the real empty-thread screenshot) ---------- */
+#prompt { background: #000; }
+#prompt .crumb { position: absolute; left: 44px; top: 24px; height: 40px; display: flex; align-items: center; font-size: 25px; white-space: nowrap; }
+#prompt .crumb svg { stroke: #8f8f8f; }
+#prompt .crumb .np { color: #9c9c9c; margin-left: 12px; font-weight: 500; }
+#prompt .crumb .sl { color: #6c6c6c; margin: 0 22px; }
+#prompt .crumb .nt { color: #f4f4f4; font-weight: 500; }
+#prompt .tools { position: absolute; right: 48px; top: 30px; display: flex; gap: 30px; }
+#prompt .tools svg { stroke: #a0a0a0; }
+#prompt .head { position: absolute; left: 0; right: 0; top: 352px; text-align: center; font-size: 62px; font-weight: 400; letter-spacing: -0.012em; line-height: 80px; }
+#prompt .sub { position: absolute; left: 0; right: 0; top: 446px; text-align: center; font-size: 27px; font-weight: 500; line-height: 36px; }
+#prompt .box { position: absolute; left: 340px; top: 520px; width: 1240px; height: 204px; border-radius: 28px; background: #101010; border: 1.5px solid #242424; }
+#prompt .inp { position: absolute; left: 34px; top: 30px; right: 34px; font-size: 28px; line-height: 40px; white-space: pre; height: 40px; }
+#prompt .ph { color: #8d8d8d; }
+#prompt .ph b { font-weight: 400; }
+#prompt .typed { color: #f2f2f2; }
+#prompt .caret { position: absolute; top: 3px; width: 2px; height: 34px; background: #fff; }
+#prompt .clip { position: absolute; left: 30px; bottom: 28px; }
+#prompt .clip svg, #prompt .mic svg { stroke: #a8a8a8; }
+#prompt .right { position: absolute; right: 22px; bottom: 18px; display: flex; align-items: center; }
+#prompt .chip { font-size: 26px; font-weight: 500; color: #e8e8e8; white-space: nowrap; }
+#prompt .chip span { color: #a2a2a2; font-weight: 500; }
+#prompt .mic { margin-left: 42px; }
+#prompt .send { margin-left: 28px; width: 56px; height: 56px; border-radius: 50%; background: #2b2b2b; display: flex; align-items: center; justify-content: center; }
+#prompt .send svg { stroke: #e6e6e6; }
+#prompt .fa { position: absolute; top: 742px; right: 368px; height: 34px; display: flex; align-items: center; font-size: 23px; color: #9a9a9a; white-space: nowrap; }
+#prompt .fa svg { stroke: #9a9a9a; margin-right: 11px; }
+.uline { position: absolute; height: 2px; background: #fff; opacity: 0; left: 0; top: 0; }
+#overlay { position: absolute; left: 0; top: 0; opacity: 0; z-index: 0; }
+#prompt .el, #prompt .uline { z-index: 2; }
+
+/* ---------- chat view (after the real reply screenshot) ---------- */
+#chat { background: #1a1a1a; --colw: 1320px; --fs: 27px; --rw: 1180px; --top: 52px; }
+#chat .col { position: absolute; left: 50%; top: var(--top); width: var(--colw); margin-left: calc(var(--colw) / -2); }
+#chat .bw { display: flex; justify-content: flex-end; }
+#chat .bubble { background: #2a2a2a; border-radius: 22px; padding: 21px 30px; font-size: var(--fs); line-height: 1.35; color: #f1f1f1; max-width: 86%; }
+#chat .label { margin-top: 74px; font-size: var(--fs); color: #8e8e8e; display: inline-block; white-space: nowrap; }
+#chat .label i { font-style: normal; margin-left: 14px; }
+#chat .reply { margin-top: 26px; width: var(--rw); font-family: "Source Serif 4", "Noto Serif", serif; font-size: calc(var(--fs) * 1.07); line-height: 1.42; color: #efede6; }
+#chat .reply p { margin-bottom: 0.72em; }
+#chat .reply p span { opacity: 1; }
+#chat .comp { position: absolute; left: 50%; bottom: 76px; width: calc(var(--colw) + 60px); margin-left: calc((var(--colw) + 60px) / -2); height: 78px; border-radius: 26px; background: #2a2a2a; border: 1.5px solid #3b3b3b; display: flex; align-items: center; padding: 0 30px; font-size: calc(var(--fs) * 0.96); color: #8b8b8b; }
+#chat .comp svg { stroke: #dcdcdc; }
+#chat .comp .w { margin-left: 22px; flex: 1; }
+#chat .foot { position: absolute; left: 50%; bottom: 26px; width: var(--colw); margin-left: calc(var(--colw) / -2); text-align: right; font-size: calc(var(--fs) * 0.82); color: #e4e4e4; }
+#chat .foot span { color: #9a9a9a; margin-left: 10px; }
+body.narrow #chat { --colw: 838px; --fs: 23px; --rw: 800px; --top: 64px; }
+body.narrow #chat .bubble { max-width: 100%; }
+body.narrow #chat .label { margin-top: 56px; }
+
+/* ---------- artist page (after conway.artstation.com/projects/xYxy4X) ---------- */
+#page { background: #000; color: #bbb; }
+#page .addr { position: absolute; left: 0; right: 0; top: 0; height: 66px; background: #0b0b0c; border-bottom: 1px solid #1f1f22; z-index: 5; display: flex; align-items: center; justify-content: center; }
+#page .addr .f { width: 900px; height: 42px; border-radius: 21px; background: #17171a; display: flex; align-items: center; padding: 0 22px; font-size: 21px; color: #d8d8d8; letter-spacing: 0.005em; }
+#page .addr .f svg { stroke: #8a8a8a; margin-right: 14px; }
+#page .addr .f em { font-style: normal; color: #8a8a8a; }
+#page .dots { position: absolute; left: 30px; top: 25px; display: flex; gap: 12px; }
+#page .dots i { width: 14px; height: 14px; border-radius: 50%; background: #2a2a2e; display: block; }
+#page .scroll { position: absolute; left: 0; right: 0; top: 66px; }
+#page .hdr { display: flex; align-items: center; justify-content: space-between; padding: 22px 110px 20px; border-bottom: 1px solid #141416; }
+#page .site { font-size: 46px; font-weight: 900; letter-spacing: 1px; color: #fff; line-height: 1.2; }
+#page .subt { font-size: 22px; font-weight: 400; color: #f1f1f1; margin-top: 2px; }
+#page .nav { font-size: 22px; color: #fff; display: flex; gap: 46px; }
+#page .album { height: 56px; background: #0c0c0e; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #fff; }
+#page .album span { border-bottom: 2px solid #13aff0; padding: 4px 2px; }
+#page h1 { text-align: center; font-size: 66px; font-weight: 700; color: #fff; margin-top: 40px; line-height: 1.25; }
+#page h1 span { position: relative; display: inline-block; }
+#page .desc { width: 1200px; margin: 34px auto 0; font-size: 27px; line-height: 1.72; color: #bbbbbb; position: relative; }
+#page .desc .q { position: relative; }
+#page .img { width: 1040px; margin: 46px auto 0; }
+#page .img img { width: 100%; display: block; }
+#page .ul { position: absolute; left: 0; bottom: -6px; height: 2px; background: #fff; width: 0; }
+#page .q .ul { bottom: 1px; }
+#page .bar { position: absolute; left: -34px; top: 10px; bottom: 10px; width: 2px; background: #fff; opacity: 0; }
+</style>
+</head>
+<body>
+
+<div class="layer" id="title"><div class="t">THREE VOIDS</div></div>
+
+<div class="layer" id="credit">
+  <div id="crA" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column">
+    <div class="c1">&ldquo;Art Block&rdquo; by Daniel Conway, 2022</div>
+    <div class="c2">conway.artstation.com</div>
+  </div>
+  <div id="crB" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;opacity:0">
+    <div class="crh">Featured in this video</div>
+    <table class="crt">
+      <tr><td>&ldquo;Art Block&rdquo;, 2022</td><td>Daniel Conway</td><td>conway.artstation.com</td></tr>
+      <tr><td>2b2t</td><td>the server, running since December 2010</td><td>2b2t.org</td></tr>
+      <tr><td>2b2t Museum</td><td>map art wall and preserved bases</td><td>2b2tmuseum.org</td></tr>
+      <tr><td>2b2t.place</td><td>spawn, highways and griefed bases as they are now</td><td>wayback.2b2t.place</td></tr>
+      <tr><td>2b2t Atlas</td><td>maps, spawn archives 2012&ndash;2022, highway and location data</td><td>2b2tatlas.com</td></tr>
+      <tr><td>2b2t Wiki</td><td>history and coordinates</td><td>2b2t.miraheze.org</td></tr>
+      <tr><td>Minecraft</td><td>Mojang Studios</td><td>minecraft.net</td></tr>
+      <tr><td>T3 Code</td><td>the empty prompt window</td><td>github.com/pingdotgg/t3code</td></tr>
+      <tr><td>Claude</td><td>the model that was asked, and its reply</td><td>claude.ai</td></tr>
+      <tr><td>Music</td><td>original score, composed and rendered as code</td><td>Upright Piano KW &middot; Salamander Grand Piano</td></tr>
+    </table>
+    <div class="crn">Spawn archive maps via 2b2t Atlas: Late_Settler / Internet Archive (2012), James Rustles (2016),<br>Southern Canal Corporation / Internet Archive (2018), Ic3Tank (2022). Builds and map art belong to their builders.<br>Piano samples: Upright Piano KW (CC0, freepats) and Salamander Grand Piano by Alexander Holm (CC BY 3.0).</div>
+  </div>
+</div>
+
+<div class="layer" id="cursor"><div class="bar"></div></div>
+
+<div class="layer" id="prompt">
+  <div class="crumb el" data-g="chrome">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M9 4v16"/></svg>
+    <svg style="margin-left:34px" width="27" height="27" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="2.6 3.2"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+    <span class="np" id="np1">No project</span><span class="sl">/</span><span class="nt">New thread</span>
+  </div>
+  <div class="tools el" data-g="chrome">
+    <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M7.5 9h9M7.5 12h9M7.5 15h9"/></svg>
+    <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 14.5h18"/></svg>
+    <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M15 4v16"/></svg>
+  </div>
+  <div class="head el" data-g="head"><span id="hl">What should we work on?</span></div>
+  <div class="sub el" data-g="sub"><span id="np2">No project</span></div>
+  <div class="box el" data-g="box">
+    <div class="inp"><span class="ph" id="ph"><b id="aa">Ask anything.</b> @ files, $ skills, / commands</span><span class="typed" id="typed"></span><div class="caret" id="caret"></div></div>
+    <div class="clip"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg></div>
+    <div class="right">
+      <div class="chip">Fable 5.2 <span>Medium</span></div>
+      <div class="mic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/></svg></div>
+      <div class="send" id="send"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 19V5"/></svg></div>
+    </div>
+  </div>
+  <div class="fa el" data-g="fa">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="M4 3l17 18"/></svg>
+    <span id="fa">Full access</span>
+  </div>
+  <div class="uline" id="u1"></div><div class="uline" id="u2"></div>
+  <img id="overlay" src="../../Daniel%20Conway%20-%20Art%20Block_files/daniel-conway-art-block_MJ9i.jpg">
+</div>
+
+<div class="layer" id="chat">
+  <div class="col">
+    <div class="bw"><div class="bubble" id="bubble">What software would you build, if you could build anything?</div></div>
+    <div class="label" id="label">Deciding how to answer a preferences question<i>&rsaquo;</i></div>
+    <div class="reply" id="reply">
+      <p id="p1">Probably a tool that shows where any claim comes from. You highlight a sentence in an article, a paper, or a chat with me, and it unfolds the chain behind it: the original study or source, how the claim changed as it got repeated, what the strongest counter-evidence is, and how much weight the whole thing can actually bear.</p>
+      <p id="p2">I’d pick that because most of what people believe arrives third-hand, and checking it takes hours. Make it take seconds, and a lot of confusion and bad arguments never get started. It’s also a hard, fun problem: part search, part reasoning, and part interface design to show uncertainty without overwhelming anyone.</p>
+      <p id="p3">My runner-up is a simulator for everyday decisions, like “what happens to my finances and free time if I take this job?”, which you could poke at like a spreadsheet, but in plain language.</p>
+      <p id="p4">What about you, is there something you wish existed?</p>
+    </div>
+  </div>
+  <div class="comp" id="comp">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    <span class="w">Write a message…</span>
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v3"/></svg>
+  </div>
+  <div class="foot" id="foot">Fable 5.2<span>Medium</span></div>
+</div>
+
+<div class="layer" id="page">
+  <div class="addr pe" id="addr">
+    <div class="dots"><i></i><i></i><i></i></div>
+    <div class="f"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>conway.artstation.com<em>/projects/xYxy4X</em></div>
+  </div>
+  <div class="scroll" id="scroll">
+    <div class="hdr pe" id="hdr">
+      <div><div class="site">Daniel Conway</div><div class="subt">Artist at Take Two</div></div>
+      <div class="nav"><span>Home page</span><span>Resume</span></div>
+    </div>
+    <div class="album pe" id="album"><span>All</span></div>
+    <h1 id="h1"><span>Art Block<div class="ul" id="ul1"></div></span></h1>
+    <div class="desc" id="desc"><div class="bar" id="dbar"></div><span class="d">'Art Block'<br>As an artist we all go through a period of time when our creative vision seems to abandon us, even the world around us does not inspire anymore. I had art block during the pandemic and it always felt like </span><span class="q" id="quote">staring into a void<div class="ul" id="ul2"></div></span><span class="d"> when I was looking at a blank canvas...I tried to capture that concept in this image😌<br>instagram.com/ArtofConway<br>twitter.com/ArtofConway</span></div>
+    <div class="img pe" id="pimg"><img src="../../Daniel%20Conway%20-%20Art%20Block_files/daniel-conway-art-block_MJ9i.jpg"></div>
+  </div>
+</div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const $$ = (s) => [...document.querySelectorAll(s)];
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const ss = (t, a, b) => { const x = clamp((t - a) / (b - a)); return x * x * (3 - 2 * x); };
+const sm = (t, a, b) => { const x = clamp((t - a) / (b - a)); return x * x * x * (x * (x * 6 - 15) + 10); };
+const lerp = (a, b, x) => a + (b - a) * x;
+const mix = (c1, c2, x) => 'rgb(' + c1.map((v, i) => Math.round(lerp(v, c2[i], x))).join(',') + ')';
+let KEY = [];
+function S(el, prop, val) { // set a style, record it in the frame key
+  if (typeof val === 'number') val = Math.round(val * 1000) / 1000;
+  el.style[prop] = val; KEY.push(val);
+}
+function rnd(seed) { let s = seed >>> 0; return () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }; }
+const BLINK = 1.06;
+const caretOn = (t, t0 = 0) => t >= t0 && ((t - t0) % BLINK) < BLINK / 2;
+
+const QUESTION = 'What software would you build, if you could build anything?';
+let ID, DUR, P, ST = {};
+
+function show(...ids) { $$('.layer').forEach(l => l.style.display = ids.includes(l.id) ? (l.id === 'title' || l.id === 'credit' ? 'flex' : 'block') : 'none'); }
+function rectOf(el) { const r = el.getBoundingClientRect(); return { x: r.left, y: r.top, w: r.width, h: r.height }; }
+
+/* ---- prompt helpers ---- */
+function promptCaret(t, t0, x) {
+  const c = $('#caret');
+  S(c, 'left', (x === undefined ? 0 : x) + 'px');
+  S(c, 'opacity', caretOn(t, t0) ? 1 : 0);
+}
+function typedState(n) {
+  $('#typed').textContent = QUESTION.slice(0, n); KEY.push('n' + n);
+  S($('#ph'), 'display', n > 0 ? 'none' : 'inline');
+  const has = n > 0;
+  S($('#send'), 'background', has ? '#f2f2f2' : '#2b2b2b');
+  S($('#send svg'), 'stroke', has ? '#111' : '#e6e6e6');
+  return n > 0 ? $('#typed').getBoundingClientRect().width + 1 : 0;
+}
+/* ---- chat helpers ---- */
+function wrapWords() {
+  if (ST.words) return;
+  ST.words = [];
+  $$('#reply p').forEach((p, pi) => {
+    const ws = p.textContent.split(' ');
+    p.innerHTML = '';
+    ws.forEach((w, i) => { const s = document.createElement('span'); s.textContent = w + (i < ws.length - 1 ? ' ' : ''); p.appendChild(s); ST.words.push({ el: s, p: pi }); });
+  });
+}
+function chatState({ bubble = 1, label = 1, words = 1e9, dim = 0, comp = 1, hl = null, hw = null }) {
+  S($('#bubble'), 'opacity', bubble * lerp(1, 0.3, dim));
+  S($('#label'), 'opacity', label * lerp(1, 0.3, dim));
+  S($('#comp'), 'opacity', comp * lerp(1, 0.4, dim));
+  S($('#foot'), 'opacity', comp * lerp(1, 0.4, dim));
+  ST.words.forEach((w, i) => {
+    let o = clamp(words - i);
+    if (w.p > 0) o *= lerp(1, 0.26, dim);
+    if (hl) o *= hl.includes('p' + (w.p + 1)) ? 1 : 0.24;
+    if (hw) o *= hw[w.p];
+    S(w.el, 'opacity', o);
+  });
+  S($('#p1'), 'color', mix([239, 237, 230], [255, 255, 255], dim));
+  const side = hl ? 0.3 : (hw ? hw[4] : 1);
+  if (hl || hw) { S($('#bubble'), 'opacity', bubble * side); S($('#label'), 'opacity', label * side);
+    S($('#comp'), 'opacity', comp * lerp(0.4, 1, side)); S($('#foot'), 'opacity', comp * lerp(0.4, 1, side)); }
+}
+
+const SCENES = {
+  C5: { setup() { show('title'); }, frame(t) { S($('#title .t'), 'opacity', ss(t, P.in0 ?? 0.3, P.in1 ?? 1.5)); } },
+  E5: { setup() { show('credit'); }, frame(t) {
+    S($('#credit .c1'), 'opacity', ss(t, P.in0 ?? 0.8, (P.in0 ?? 0.8) + 1.4));
+    S($('#credit .c2'), 'opacity', ss(t, (P.in0 ?? 0.8) + 0.7, (P.in0 ?? 0.8) + 2.1));
+    const sw = P.list ?? 5.2;
+    S($('#crA'), 'opacity', 1 - ss(t, sw, sw + 0.9)); S($('#crB'), 'opacity', ss(t, sw + 0.7, sw + 1.9));
+  } },
+  E4: { setup() { show('cursor'); }, frame(t) { S($('#cursor .bar'), 'opacity', caretOn(t, P.t0 ?? 2.0) ? 1 : 0); } },
+
+  U5a: { setup() { show('prompt'); typedState(0); }, frame(t) {
+    const b = P.black ?? 2.0;
+    const g = { box: [0, 1.6], head: [0.5, 2.1], sub: [0.9, 2.5], fa: [1.1, 2.7], chrome: [1.1, 2.7] };
+    $$('#prompt .el').forEach(e => { const [a, c] = g[e.dataset.g]; S(e, 'opacity', ss(t, b + a, b + c)); });
+    promptCaret(t, b + 2.6);
+  } },
+  U5b: { setup() { show('prompt'); typedState(0); }, frame(t) { promptCaret(t, 0); } },
+  U5c: { setup() {
+      show('prompt'); typedState(0);
+      const pad = 3;
+      const r = (id) => { const q = rectOf($(id)); return { x: q.x - pad, w: q.w + 2 * pad, y: q.y + q.h + (id === '#hl' ? 2 : 5) }; };
+      ST.targets = [[r('#aa'), r('#aa')], [r('#fa'), r('#fa')], [r('#np1'), r('#np2')], [r('#hl'), r('#hl')]];
+      ST.times = [0, 1, 2, 3].map(k => P['t' + (k + 1)] ?? DUR * (0.08 + 0.21 * k));
+    }, frame(t) {
+      promptCaret(t, 0);
+      const T = ST.times, mv = 1.1;
+      // which highlight is active, with eased travel between consecutive targets
+      let k = -1; for (let i = 0; i < 4; i++) if (t >= T[i]) k = i;
+      const on = ss(t, T[0], T[0] + 0.5);
+      [0, 1].forEach(j => {
+        const u = $('#u' + (j + 1));
+        let cur;
+        if (k <= 0) { const a = ST.targets[0][j]; const grow = sm(t, T[0], T[0] + 0.7); cur = { x: a.x, y: a.y, w: a.w * grow }; }
+        else { const a = ST.targets[k - 1][j], b = ST.targets[k][j], x = sm(t, T[k], T[k] + mv); cur = { x: lerp(a.x, b.x, x), y: lerp(a.y, b.y, x), w: lerp(a.w, b.w, x) }; }
+        S(u, 'transform', `translate(${cur.x.toFixed(2)}px,${cur.y.toFixed(2)}px)`);
+        S(u, 'width', cur.w.toFixed(2) + 'px');
+        S(u, 'opacity', on);
+      });
+      // active label goes white, everything else recedes a little
+      const act = (i) => k < 0 ? 0 : (i === k ? sm(t, T[k], T[k] + mv) : (i === k - 1 ? 1 - sm(t, T[k], T[k] + mv) : 0));
+      const dim = on;
+      const lv = (a) => lerp(1, lerp(0.58, 1, a), dim);
+      S($('#aa'), 'color', mix([141, 141, 141], [255, 255, 255], act(0)));
+      S($('#ph'), 'opacity', lv(act(0)));
+      S($('#prompt .fa'), 'opacity', lv(act(1)));
+      $$('#prompt .crumb svg').forEach(e => S(e, 'opacity', lv(0)));
+      S($('#fa'), 'color', mix([154, 154, 154], [255, 255, 255], act(1)));
+      S($('#np1'), 'color', mix([156, 156, 156], [255, 255, 255], act(2)));
+      S($('#np1'), 'opacity', lv(act(2)));
+      S($('#prompt .head'), 'opacity', lv(act(3)));
+      S($('#prompt .sub'), 'opacity', lv(act(2)));
+      S($('#prompt .crumb .nt'), 'opacity', lv(0));
+      S($('#prompt .crumb .sl'), 'opacity', lv(0));
+      S($('#prompt .tools'), 'opacity', lv(0));
+      S($('#prompt .right'), 'opacity', lv(0));
+      S($('#prompt .clip'), 'opacity', lv(0));
+    } },
+  U5d: { setup() {
+      show('prompt'); typedState(0);
+      // painting scaled so the woman (53.5%, 65.5%) sits on the centre of the prompt box
+      const s = P.scale ?? 1.25, w = 864 * s, h = 1080 * s, bx = 960, by = 622;
+      const o = $('#overlay'); o.style.width = w + 'px'; o.style.height = h + 'px';
+      o.style.left = (bx - 0.535 * w) + 'px'; o.style.top = (by - 0.655 * h) + 'px';
+    }, frame(t) {
+      promptCaret(t, 0);
+      const a = P.in0 ?? 0.5, b = P.in1 ?? 2.6, c = P.out0 ?? DUR - 1.6, d = P.out1 ?? DUR - 0.3;
+      const x = ss(t, a, b) * (1 - ss(t, c, d));
+      S($('#overlay'), 'opacity', (P.alpha ?? 0.82) * x);
+      // the interface stays readable on top; the box turns to glass so she shows through it
+      const mk = P.mark ?? 1e9, m = ss(t, mk, mk + 0.6) * x;
+      S($('#prompt .box'), 'background', 'rgba(16,16,16,' + (1 - 0.86 * x).toFixed(3) + ')');
+      S($('#prompt .box'), 'borderColor', mix([36, 36, 36], [255, 255, 255], Math.max(0.35 * x, m)));
+      S($('#prompt .box'), 'boxShadow', '0 0 0 ' + (2.5 * m).toFixed(2) + 'px rgba(255,255,255,' + (0.9 * m).toFixed(3) + ')');
+      $$('#prompt .el').forEach(e => { if (e.dataset.g !== 'box' && e.dataset.g !== 'head') S(e, 'opacity', 1 - 0.55 * x); });
+    } },
+  // the prompt with the model chip singled out: chip = time the underline appears, off = time it goes
+  U5m: { setup() { show('prompt'); typedState(0);
+      const q = rectOf($('#prompt .chip')); ST.r = { x: q.x - 3, y: q.y + q.h + 5, w: q.w + 6 };
+    }, frame(t) {
+      promptCaret(t, 0);
+      const c = P.chip ?? 0.4, off = P.off ?? 1e9, x = sm(t, c, c + 0.7), o = 1 - ss(t, off, off + 0.6), d = ss(t, c, c + 0.5) * o;
+      const u = $('#u1'); S(u, 'transform', 'translate(' + ST.r.x.toFixed(2) + 'px,' + ST.r.y.toFixed(2) + 'px)'); S(u, 'width', (ST.r.w * x).toFixed(2) + 'px'); S(u, 'opacity', o * (t >= c ? 1 : 0));
+      const lv = lerp(1, 0.42, d);
+      ['.head', '.sub', '.fa', '.crumb', '.tools', '.clip', '.mic', '.send'].forEach(q => S($('#prompt ' + q), 'opacity', lv));
+      S($('#ph'), 'opacity', lv); S($('#prompt .chip'), 'color', mix([232, 232, 232], [255, 255, 255], d));
+    } },
+  U6a: { setup() {
+      show('prompt', 'chat'); wrapWords();
+      const send = P.send ?? Math.min(9.0, DUR * 0.72);
+      const start = P.start ?? 1.2;
+      // natural-ish typing rhythm, seeded so re-renders are identical
+      const r = rnd(7); let acc = 0; const ts = [];
+      for (let i = 0; i < QUESTION.length; i++) {
+        const ch = QUESTION[i], prev = QUESTION[i - 1];
+        let d = 0.055 + r() * 0.06;
+        if (prev === ' ') d += 0.03 + (r() < 0.25 ? 0.16 * r() : 0);
+        if (prev === ',') d += 0.3;
+        if (ch === '?') d += 0.12;
+        acc += d; ts.push(acc);
+      }
+      const avail = Math.max(1.5, send - 1.1 - start), k = Math.min(1, avail / acc);
+      ST.ts = ts.map(x => start + x * k); ST.send = send; ST.typeEnd = start + acc * k;
+    }, frame(t) {
+      let n = 0; while (n < ST.ts.length && t >= ST.ts[n]) n++;
+      const x = typedState(n);
+      // caret stays solid while typing, blinks when idle
+      const idle0 = n === 0 ? 0 : ST.ts[n - 1];
+      const c = $('#caret'); S(c, 'left', x + 'px'); S(c, 'opacity', (n > 0 && n < ST.ts.length) || caretOn(t, idle0) ? 1 : 0);
+      const press = ss(t, ST.send - 0.12, ST.send) * (1 - ss(t, ST.send, ST.send + 0.14));
+      S($('#send'), 'transform', `scale(${(1 - 0.1 * press).toFixed(4)})`);
+      const x2 = ss(t, ST.send + 0.1, ST.send + 0.55);
+      S($('#chat'), 'opacity', x2);
+      chatState({ bubble: 1, label: 0, words: 0 });
+      S($('#bubble'), 'transform', `translateY(${(14 * (1 - sm(t, ST.send + 0.1, ST.send + 0.75))).toFixed(2)}px)`);
+    } },
+  U6b: { setup() {
+      show('chat'); wrapWords();
+      const t0 = P.stream ?? 1.7, rate = P.rate ?? 30; let acc = t0, lastP = 0;
+      ST.wt = ST.words.map((w) => { if (w.p !== lastP) { acc += 0.28; lastP = w.p; } const v = acc; acc += 1 / rate; return v; });
+    }, frame(t) {
+      let words = 0; ST.wt.forEach((wt, i) => { if (t >= wt) words = i + clamp((t - wt) / 0.09); });
+      // h1 / h3 = the first / second idea is singled out, hb = both ideas, hoff = back to normal
+      const h1 = P.h1 ?? 1e9, h3 = P.h3 ?? 1e9, hb = P.hb ?? 1e9, hoff = P.hoff ?? 1e9, F = 1.0;
+      const on = ss(t, h1, h1 + F) * (1 - ss(t, hoff, hoff + F));           // anything dimmed at all
+      const a1 = 1 - ss(t, h3, h3 + F) * (1 - ss(t, hb, hb + F));           // paragraph 1 lit
+      const a3 = ss(t, h3, h3 + F);                                          // paragraph 3 lit
+      const lv = (a) => lerp(1, lerp(0.4, 1, a), on);
+      chatState({ bubble: 1, label: ss(t, P.label ?? 0.6, (P.label ?? 0.6) + 0.3), words,
+        hw: t >= h1 ? [lv(a1), lv(0), lv(a3), lv(0), lerp(1, 0.5, on)] : null });
+    } },
+  // still plates for the Python camera
+  PLATE_chat: { setup() { show('chat'); wrapWords(); }, frame() { chatState({ dim: P.dim ?? 0, hl: P.hl ? [P.hl] : null }); } },
+
+  P1a: { setup() {
+      show('page');
+      const k = DUR / 25.2;
+      ST.tt = P.title ?? 3.0 * k; ST.td = P.desc ?? 6.5 * k; ST.tq = P.quote ?? 11.5 * k;
+      ST.h1w = $('#h1 span').getBoundingClientRect().width; ST.qw = $('#quote').getBoundingClientRect().width;
+    }, frame(t) {
+      S($('#page'), 'opacity', ss(t, 0, 0.7));
+      S($('#scroll'), 'transform', `translateY(${(70 * (1 - sm(t, 0, 2.4))).toFixed(2)}px)`);
+      const a = sm(t, ST.tt, ST.tt + 0.8), b = sm(t, ST.td, ST.td + 1.2), c = sm(t, ST.tq, ST.tq + 1.0);
+      S($('#ul1'), 'width', (ST.h1w * a).toFixed(2) + 'px');
+      S($('#ul1'), 'opacity', 1 - 0.65 * b);
+      // description: the page chrome recedes, his words come forward
+      $$('#page .pe').forEach(e => S(e, 'opacity', lerp(1, 0.5, b)));
+      S($('#h1'), 'opacity', lerp(1, 0.6, b));
+      S($('#dbar'), 'opacity', b);
+      const dcol = mix(mix([187, 187, 187], [240, 240, 240], b).match(/\d+/g).map(Number), [150, 150, 150], c);
+      $$('#desc .d').forEach(e => S(e, 'color', dcol));
+      S($('#quote'), 'color', mix([187, 187, 187], [255, 255, 255], Math.max(b * 0.9, c)));
+      S($('#ul2'), 'width', (ST.qw * c).toFixed(2) + 'px');
+    } },
+};
+
+window.scene = {
+  async setup(id, dur, params) {
+    ID = id; DUR = dur; P = params || {}; ST = {};
+    if (P.narrow) document.body.classList.add('narrow');
+    await Promise.all(['300', '400', '500', '600', '700', '900'].map(w => document.fonts.load(`${w} 20px Inter`)).concat([document.fonts.load('400 20px "Source Serif 4"')]));
+    await document.fonts.ready;
+    await Promise.all($$('img').map(i => i.decode().catch(() => {})));
+    SCENES[id].setup();
+    return true;
+  },
+  frame(t) { KEY = []; SCENES[ID].frame(t); return KEY.join('|'); },
+  rects(sels) { // text extents: for wrapped-word paragraphs use the union of the word boxes
+    const o = {};
+    sels.forEach(s => { const el = $(s); const kids = [...el.querySelectorAll(':scope > span')];
+      if (!kids.length) { o[s] = rectOf(el); return; }
+      const rs = kids.map(k => k.getBoundingClientRect());
+      const x0 = Math.min(...rs.map(r => r.left)), x1 = Math.max(...rs.map(r => r.right)), y0 = Math.min(...rs.map(r => r.top)), y1 = Math.max(...rs.map(r => r.bottom));
+      o[s] = { x: x0, y: y0, w: x1 - x0, h: y1 - y0 }; });
+    return o; },
+};
+</script>
+</body>
+</html>

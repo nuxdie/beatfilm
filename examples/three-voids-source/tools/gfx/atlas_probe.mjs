@@ -1,0 +1,12 @@
+import puppeteer from 'puppeteer-core';
+const out = process.argv[2];
+const b = await puppeteer.launch({executablePath: process.env.CHROME || '/usr/bin/google-chrome', headless: 'new', args: ['--window-size=1920,1080','--no-sandbox']});
+const p = await b.newPage(); await p.setViewport({width:1920,height:1080});
+const urls = new Set();
+p.on('request', r => { const u = r.url(); if (!/\.(css|woff2|js)(\?|$)/.test(u)) urls.add(r.resourceType()+' '+u); });
+await p.goto('https://2b2tatlas.com/map', {waitUntil:'networkidle2', timeout: 90000}).catch(e=>console.log('goto', e.message));
+await new Promise(r=>setTimeout(r,8000));
+await p.screenshot({path: out + '/atlas0.png'});
+console.log([...urls].join('\n'));
+console.log(await p.evaluate(() => document.body.innerText.slice(0,1500)));
+await b.close();

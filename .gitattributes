@@ -1,0 +1,2 @@
+# Keep the historical source snapshot byte-for-byte, including its whitespace.
+examples/three-voids-source/** -whitespace

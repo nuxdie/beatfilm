@@ -1,0 +1,24 @@
+ART BLOCK MAP ART (2b2tmuseum.org) — saved 2026-11-13 01:15
+  F3+C: /execute in minecraft:the_end run tp @s -29999628.52 67.00 25782.08 382.24 3.29
+  dimension the_end, standing at x=-29999628.5 y=67 z=25782.1, yaw 22 (382-360), facing the art wall
+  CONFIRMED: /warp EndMapArtEvent ("2026 New Year's Map Art Event"), warp lands at -29999554 70 25776; art wall is ~74 blocks west
+DND on (was unset) — restore: xfconf-query -c xfce4-notifyd -p /do-not-disturb -r
+
+SYSTEM SETTINGS CHANGED FOR THE SHOOT (restore when done):
+  xfconf-query -c xfwm4 -p /general/prevent_focus_stealing -s false
+  xfconf-query -c xfwm4 -p /general/activate_action -s bring
+  xfconf-query -c xfce4-notifyd -p /do-not-disturb -r
+  Minecraft instance "1.21.4(1)": originals saved in build/options.txt.orig and build/instance.cfg.orig
+
+=== 2b2t.place (wayback.2b2t.place) — spectator, /tp x y z [overworld|nether|end], /flashback browse (2024-2026), /now ===
+REAL 2b2t COORDS (from 2b2t.miraheze.org, unverified until visited). OW unless noted.
+Bases: Eastmarch 7278700/-1668700 (griefed 17 Jul 2024) | Hidden Vale -40608/534839 y-59 (self-griefed Sep 2024) | Don Chyku -1041200/-277300 (Jul 2024)
+  DonFuer28 END -3449874/2806938 (Mayan pyramid, Jul 2024) | Endhaven END -4645400/1805000 (Nov 2024) | SpaceValkyria3 END 68520/-111105 y65 | SV3v2 END 76890/-112104
+  SkyMasons 827065/439090 | 2b2tMuseum 2685888/2283099 | BlockGameMecca 3066373/-137383 | BG Jerusalem -1534200/-1428800 | Imperator -1078035/-1083170
+  Wintermelon 73429/-145644 | Summermelon 237800/-461800 | Aureus 62264/-202640 | Smibville 128700/106700 | Angband -122330/-196525 | Dubrovnik -394400/130800
+  Boedecken -6648/187732 | Asgard II 163313/-67835 | Valley of Wheat 13537/0
+Spawn: roof r~2048 y255/319 | Linked Horizon Wall r=2048 (2048/0) | 2k2k crater -2000/-2000 | NFE -400/800 | VoCo fort 420/911 | Wrath -1000/-500 | Old spawn road -3500/300
+Monuments: Hardhat pyramid -1000000/-1000000 | cobble lavacast 13750/-18750 | Point Nemo 29999980/0 | 10k monument 10000/0 | End Carolina Memorial END 0/-200
+Highways (NETHER y~120-121): axes from 0,0; diagonals |x|=|z|; ring roads 1k,2.5k,5k,10k; 50k diamond. OW: 1000 ring road, canal x=0 z=400.., sky ring r1024 y255
+Seen myself: spawn obsidian plain w/ cobble monoliths at OW 800,300,800 ; nether highway +X at 1500..3000,121.5,0.5 ; login spot OW -1,64,-12438 obsidian road + tower
+workrave was stopped for filming at 13:39:53 — restart with: setsid workrave & (restarted 13:53)

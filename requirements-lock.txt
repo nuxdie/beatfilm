@@ -1,0 +1,9 @@
+# Verified extraction environment: Linux x86_64, Python 3.12
+numpy==2.5.3
+scipy==1.18.1
+soundfile==0.14.0
+pyloudnorm==0.2.0
+Pillow==10.2.0
+cffi==2.1.1
+pycparser==3.12
+typing_extensions==4.16.0
